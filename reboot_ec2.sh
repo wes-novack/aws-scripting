@@ -3,8 +3,9 @@
 
 set -e
 
-start_time=$(date +%s)
 id=$1
+sleep_duration=5
+start_time=$(date +%s)
 
 function check_parameter () {
 	if echo "$1" | grep -Pe ^i-.*; then
@@ -39,7 +40,7 @@ function wait_for_status () {
 	status=$(check_status $1)
 	while [ $status != "$2" ]; do
 		echo "Instance state not yet $2, sleeping"
-		sleep 5
+		sleep $sleep_duration
 		status=$(check_status $1)
 	done
 }
