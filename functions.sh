@@ -7,7 +7,7 @@ getnamefromip () { name=$(aws ec2 describe-instances --filter Name=private-ip-ad
 
 getidfromname () { id=$(aws ec2 describe-instances --filter Name=tag:Name,Values="$1" --query Reservations[].Instances[].InstanceId --output text);echo $id; }
 
-getipfromname () { ip=$(aws ec2 describe-instances --filter Name=tag:Name,Values="$1" --query Reservations[].Instances[].PrivateIpAddress --output text);echo $ip }
+getipfromname () { ip=$(aws ec2 describe-instances --filter Name=tag:Name,Values="$1" --query Reservations[].Instances[].PrivateIpAddress --output text);echo $ip; }
 
 sp () {
         if [ $# -eq 0 ]; then
