@@ -8,10 +8,10 @@ sleep_duration=5
 start_time=$(date +%s)
 
 function check_parameter () {
-	if echo "$1" | grep -Pe ^i-.*; then
+	if echo "$1" | grep -P '^i-[a-zA-Z0-9]{8,}'; then
 		return 0
 	else
-		echo "You must provide the instance id as a parameter. Example: i-0w7vjth34518494"
+		echo "You must provide the instance id as a parameter. Example: i-0w7vjth3"
 		return 1
 	fi
 }
