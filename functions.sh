@@ -1,13 +1,13 @@
 #!/bin/bash
 #Author: Wes Novack
 
-getidfromip () { aws ec2 describe-instances --filter Name=private-ip-address,Values="$1" --query Reservations[].Instances[].InstanceId --output text; }
+getidfromip () { id=$(aws ec2 describe-instances --filter Name=private-ip-address,Values="$1" --query Reservations[].Instances[].InstanceId --output text);echo $id; }
 
-getnamefromip () { aws ec2 describe-instances --filter Name=private-ip-address,Values="$1" --query 'Reservations[].Instances[].Tags[?Key==`Name`].Value' --output text; }
+getnamefromip () { name=$(aws ec2 describe-instances --filter Name=private-ip-address,Values="$1" --query 'Reservations[].Instances[].Tags[?Key==`Name`].Value' --output text);echo $name; }
 
-getidfromname () { aws ec2 describe-instances --filter Name=tag:Name,Values="$1" --query Reservations[].Instances[].InstanceId --output text; }
+getidfromname () { id=$(aws ec2 describe-instances --filter Name=tag:Name,Values="$1" --query Reservations[].Instances[].InstanceId --output text);echo $id; }
 
-getipfromname () { aws ec2 describe-instances --filter Name=tag:Name,Values="$1" --query Reservations[].Instances[].PrivateIpAddress --output text; }
+getipfromname () { ip=$(aws ec2 describe-instances --filter Name=tag:Name,Values="$1" --query Reservations[].Instances[].PrivateIpAddress --output text);echo $ip }
 
 sp () {
         if [ $# -eq 0 ]; then
