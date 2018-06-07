@@ -11,7 +11,7 @@ function check_parameter () {
 	if echo "$1" | grep -P '^i-[a-zA-Z0-9]{8,}'; then
 		return 0
 	else
-		echo "You must provide the instance id as a parameter. Example: i-0w7vjth3"
+		echo "An instance id parameter is required. Example: i-0w7vjth3"
 		return 1
 	fi
 }
@@ -25,7 +25,8 @@ function start_instance () {
 }
 
 function check_status () {
-	aws ec2 describe-instances --instance-ids $1 --query Reservations[].Instances[].State.Name --output text
+	aws ec2 describe-instances --instance-ids $1 \
+		--query Reservations[].Instances[].State.Name --output text
 }
 
 function check_running () {
