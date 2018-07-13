@@ -3,6 +3,8 @@
 
 getidfromip () { id=$(aws ec2 describe-instances --filter Name=private-ip-address,Values="$1" --query Reservations[].Instances[].InstanceId --output text);echo $id; }
 
+getnamefromid () { name=$(aws ec2 describe-instances --filter Name=instance-id,Values="$1" --query 'Reservations[].Instances[].Tags[?Key==`Name`].Value' --output text);echo $name; }
+
 getnamefromip () { name=$(aws ec2 describe-instances --filter Name=private-ip-address,Values="$1" --query 'Reservations[].Instances[].Tags[?Key==`Name`].Value' --output text);echo $name; }
 
 getidfromname () { id=$(aws ec2 describe-instances --filter Name=tag:Name,Values="$1" --query Reservations[].Instances[].InstanceId --output text);echo $id; }
