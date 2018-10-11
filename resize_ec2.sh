@@ -1,5 +1,6 @@
 #!/bin/bash
 #Author: Wes Novack
+#Usage: resize_ec2.sh i-instanceid new.instancetype
 
 set -e
 
