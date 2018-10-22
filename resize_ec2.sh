@@ -28,7 +28,7 @@ function start_instance () {
 
 function check_status () {
 	aws ec2 describe-instances --instance-ids $1 \
-		--query Reservations[].Instances[].State.Name --output text
+		--query "Reservations[].Instances[].State.Name" --output text
 }
 
 function check_running () {
