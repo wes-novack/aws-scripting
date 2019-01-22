@@ -14,7 +14,7 @@ getipfromname () { ip=$(aws ec2 describe-instances --filter Name=tag:Name,Values
 sp () {
         if [ $# -eq 0 ]; then
                 echo "Aborting: 1 profile name argument is required."; return 1
-        elif ! grep -q "$1" ~/.aws/config; then
+        elif ! grep -q "$1" ~/.aws/credentials; then
                 echo "Aborting: $1 is not configured as an AWS profile."; return 1
         else
                 export AWS_PROFILE="$1"
