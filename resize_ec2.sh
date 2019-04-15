@@ -46,7 +46,7 @@ function resize_instance () {
 
 function main () {
 	check_parameter $id
-	status=$(check_status $1)
+	status=$(check_status $id)
 	if [ "$status" = "running" ]; then
 		stop_instance $id
 		wait_for_status $id stopped
