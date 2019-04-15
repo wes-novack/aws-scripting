@@ -31,17 +31,9 @@ function check_status () {
 		--query "Reservations[].Instances[].State.Name" --output text
 }
 
-function check_running () {
-	status=$(check_status $1)
-	if [ $status != "running" ]; then
-		echo "Can't restart instance, its state is not running."
-		return 1
-	fi
-}
-
 function wait_for_status () {
 	status=$(check_status $1)
-	while [ $status != "$2" ]; do
+	while [ "$status" != "$2" ]; do
 		echo "Instance state not yet $2, sleeping"
 		sleep $sleep_duration
 		status=$(check_status $1)
@@ -52,14 +44,20 @@ function resize_instance () {
 	aws ec2 modify-instance-attribute --instance-id $1 --instance-type $2
 }
 
-check_parameter $id
-check_running $id
-stop_instance $id
-wait_for_status $id stopped
-resize_instance $id $new_instance_type
-start_instance $id
-wait_for_status $id running
-end_time=$(date +%s)
-duration=$((end_time - start_time))
-echo "Your restart of instance $id is complete!"
-echo "This script completed in $duration seconds."
+function main () {
+	check_parameter $id
+	status=$(check_status $1)
+	if [ "$status" = "running" ]; then
+		stop_instance $id
+		wait_for_status $id stopped
+	fi
+	resize_instance $id $new_instance_type
+	start_instance $id
+	wait_for_status $id running
+	end_time=$(date +%s)
+	duration=$((end_time - start_time))
+	echo "Your restart of instance $id is complete!"
+	echo "This script completed in $duration seconds."
+}
+
+main

@@ -31,7 +31,7 @@ function check_status () {
 
 function check_running () {
 	status=$(check_status $1)
-	if [ $status != "running" ]; then
+	if [ "$status" != "running" ]; then
 		echo "Can't restart instance, its state is not running."
 		return 1
 	fi
@@ -39,20 +39,24 @@ function check_running () {
 
 function wait_for_status () {
 	status=$(check_status $1)
-	while [ $status != "$2" ]; do
+	while [ "$status" != "$2" ]; do
 		echo "Instance state not yet $2, sleeping"
 		sleep $sleep_duration
 		status=$(check_status $1)
 	done
 }
 
-check_parameter $id
-check_running $id
-stop_instance $id
-wait_for_status $id stopped
-start_instance $id
-wait_for_status $id running
-end_time=$(date +%s)
-duration=$((end_time - start_time))
-echo "Your restart of instance $id is complete!"
-echo "This script completed in $duration seconds."
+function main () {
+	check_parameter $id
+	check_running $id
+	stop_instance $id
+	wait_for_status $id stopped
+	start_instance $id
+	wait_for_status $id running
+	end_time=$(date +%s)
+	duration=$((end_time - start_time))
+	echo "Your restart of instance $id is complete!"
+	echo "This script completed in $duration seconds."
+}
+
+main
