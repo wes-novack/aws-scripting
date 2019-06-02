@@ -10,6 +10,14 @@ The script "stop_start_ec2.sh" can be used to easily stop and then start instanc
 
 ## FAQ
 
-### Will this work on Windows?
+### Do these work on Linux?
+
+Definitely. I developed these on a notebook running Fedora, under bash. 
+
+### Do these work on Windows?
 
 Yes! You can install the aws-cli on Windows and these scripts have been tested to work on both cygwin and Windows Subsystem for Linux.
+
+### Do these work on Mac?
+
+Some of these scripts leverage "grep -P", which is the PCRE (Perl Compatible Regular Expression) mode available in GNU grep. Unfortunately, this parameter and mode is not available on POSIX/Unix grep, which MacOS uses. If there is a more cross-compatible way to accomplish the same functionality that these scripts provide, I'd love to hear about it! Pull Requests welcome!
