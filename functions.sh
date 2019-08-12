@@ -21,3 +21,9 @@ sp () {
                 echo '$AWS_PROFILE == '$AWS_PROFILE
         fi
 }
+
+unsetaws () {
+        aws_envs=$(env|grep -Po 'AWS.*(?=\=)|SAML.*(?=\=)')
+        for i in $aws_envs; do unset $i; done
+}
+
