@@ -27,3 +27,22 @@ unsetaws () {
         for i in $aws_envs; do unset $i; done
 }
 
+iamdelete () {
+        #delete an iam user and related objects. Pass IAM username in as first positional parameter.
+        username=$1
+        accountnumber=$(aws sts get-caller-identity --query Account --output text)
+        aws iam delete-login-profile --user-name ${username}
+        aws iam delete-virtual-mfa-device --serial-number "arn:aws:iam::${accountnumber}:mfa/${username}"
+        iamdeletegroupmemberships ${username}
+        aws iam delete-user --user-name ${username}
+}
+
+iamdeletegroupmemberships () {
+        #delete group memberships for an IAM user. Pass IAM username in as first positional parameter.
+        username=$1
+        groups=$(aws iam list-groups-for-user --user-name ${username} --query Groups[].GroupName --output text)
+        for group in $groups; do
+                aws iam remove-user-from-group --group-name ${group} --user-name ${username}
+        done
+}
+
