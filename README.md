@@ -20,4 +20,4 @@ Yes! You can install the aws-cli on Windows and these scripts have been tested t
 
 ### Do these work on Mac?
 
-Some of these scripts leverage "grep -P", which is the PCRE (Perl Compatible Regular Expression) mode available in GNU grep. Unfortunately, this parameter and mode is not available on POSIX/Unix grep, which MacOS uses. If there is a more cross-compatible way to accomplish the same functionality that these scripts provide, I'd love to hear about it! Pull Requests welcome!
+Yes, mostly. Some of these functions leverage "grep -P", which is the PCRE (Perl Compatible Regular Expression) mode available in GNU grep. Unfortunately, this parameter and mode is not available on POSIX/Unix grep, which MacOS uses. If there is a more cross-compatible way to accomplish the same functionality that these functions provide, I'd love to hear about it! Pull Requests welcome!
