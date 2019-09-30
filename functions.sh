@@ -31,14 +31,26 @@ iamdelete () {
         #delete an iam user and related objects. Pass IAM username in as first positional parameter.
         username=$1
         accountnumber=$(aws sts get-caller-identity --query Account --output text)
-        aws iam delete-login-profile --user-name ${username}
-        aws iam delete-virtual-mfa-device --serial-number "arn:aws:iam::${accountnumber}:mfa/${username}"
-        iamdeletegroupmemberships ${username}
+	#check for login profile and delete if found
+	aws iam get-login-profile --user-name ${username} >/dev/null 2>&1
+	if [ "$?" -eq 0 ]; then 
+	        aws iam delete-login-profile --user-name ${username}
+	fi
+	#check for virtual-mfa-device and delete if found
+	mfaserial=$(aws iam list-mfa-devices --user-name ${username} --query MFADevices[].SerialNumber --output text)
+	if [ ! -z "$mfaserial" ]; then 
+		aws iam deactivate-mfa-device --user-name ${username} --serial-number "${mfaserial}"
+		aws iam delete-virtual-mfa-device --serial-number "${mfaserial}"
+	fi
+	echo "Checking and removing group memberships if found"
+	iamdeletegroupmemberships ${username}
 	accesskeyids=$(aws iam list-access-keys --user-name ${username} --query AccessKeyMetadata[].AccessKeyId --output text)
 	if [ ! -z "$accesskeyids" ] && echo "Access Keys Found, attempting to delete them"; then
 		for id in ${accesskeyids}; do
 			aws iam delete-access-key --user-name ${username} --access-key-id ${id}
 		done
+	else
+		echo "No Access Keys Found"
 	fi
         aws iam delete-user --user-name ${username}
 	if [ "$?" -eq 0 ]; then 
@@ -51,6 +63,7 @@ iamdeletegroupmemberships () {
         username=$1
         groups=$(aws iam list-groups-for-user --user-name ${username} --query Groups[].GroupName --output text)
         for group in $groups; do
+		echo "Removing user ${username} from group ${group}"
                 aws iam remove-user-from-group --group-name ${group} --user-name ${username}
         done
 }
