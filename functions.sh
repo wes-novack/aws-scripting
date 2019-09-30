@@ -34,7 +34,16 @@ iamdelete () {
         aws iam delete-login-profile --user-name ${username}
         aws iam delete-virtual-mfa-device --serial-number "arn:aws:iam::${accountnumber}:mfa/${username}"
         iamdeletegroupmemberships ${username}
+	accesskeyids=$(aws iam list-access-keys --user-name ${username} --query AccessKeyMetadata[].AccessKeyId --output text)
+	if [ ! -z "$accesskeyids" ] && echo "Access Keys Found, attempting to delete them"; then
+		for id in ${accesskeyids}; do
+			aws iam delete-access-key --user-name ${username} --access-key-id ${id}
+		done
+	fi
         aws iam delete-user --user-name ${username}
+	if [ "$?" -eq 0 ]; then 
+		echo "IAM user ${username} deleted successfully"
+	fi
 }
 
 iamdeletegroupmemberships () {
