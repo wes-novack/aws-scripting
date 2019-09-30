@@ -30,7 +30,6 @@ unsetaws () {
 iamdelete () {
         #delete an iam user and related objects. Pass IAM username in as first positional parameter.
         username=$1
-        accountnumber=$(aws sts get-caller-identity --query Account --output text)
 	#check for login profile and delete if found
 	aws iam get-login-profile --user-name ${username} >/dev/null 2>&1
 	if [ "$?" -eq 0 ]; then 
