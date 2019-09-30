@@ -11,6 +11,14 @@ getidfromname () { id=$(aws ec2 describe-instances --filter Name=tag:Name,Values
 
 getipfromname () { ip=$(aws ec2 describe-instances --filter Name=tag:Name,Values="$1" --query "Reservations[].Instances[].PrivateIpAddress" --output text);echo $ip; }
 
+gettagsfromip () { aws ec2 describe-instances --filter Name=private-ip-address,Values="$1" --query 'Reservations[].Instances[].Tags' --output table; }
+
+gettagsfromname () { aws ec2 describe-instances --filter Name=tag:Name,Values="$1" --query 'Reservations[].Instances[].Tags' --output table; }
+
+getkeyfromip () { name=$(aws ec2 describe-instances --filter Name=private-ip-address,Values="$1" --query 'Reservations[].Instances[].KeyName' --output text);echo $name; }
+
+gettagsfromid () { aws ec2 describe-instances --instance-ids "$1" --query 'Reservations[].Instances[].Tags' --output table; }
+
 sp () {
         if [ $# -eq 0 ]; then
                 echo "Aborting: 1 named profile argument is required."; return 1
