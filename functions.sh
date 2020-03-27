@@ -20,6 +20,7 @@ getkeyfromip () { name=$(aws ec2 describe-instances --filter Name=private-ip-add
 gettagsfromid () { aws ec2 describe-instances --instance-ids "$1" --query 'Reservations[].Instances[].Tags' --output table; }
 
 sp () {
+	#switch profile to an aws cli named profile
 	if [ $# -eq 0 ]; then
 		echo "Aborting: 1 named profile argument is required."; return 1
 	elif ! grep -q "$1" ~/.aws/credentials; then
@@ -31,6 +32,7 @@ sp () {
 }
 
 unsetaws () {
+	#unsets all AWS and SAML environment variables
 	aws_envs=$(env|grep -o 'AWS\|SAML'|sed 's/=.*//g')
 	for i in $aws_envs; do unset $i; done
 }
@@ -90,7 +92,7 @@ iamdeletegroupmemberships () {
 	groups=$(aws iam list-groups-for-user --user-name ${username} --query Groups[].GroupName --output text)
 	for group in $groups; do
 	echo "Removing user ${username} from group ${group}"
-			aws iam remove-user-from-group --group-name ${group} --user-name ${username}
+		aws iam remove-user-from-group --group-name ${group} --user-name ${username}
 	done
 }
 
