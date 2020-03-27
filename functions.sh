@@ -1,5 +1,6 @@
 #!/bin/bash
-#Author: Wes Novack
+#Description: a collection of bash functions that leverage the AWS CLI
+#Formatting: tab spacing
 
 getidfromip () { id=$(aws ec2 describe-instances --filter Name=private-ip-address,Values="$1" --query "Reservations[].Instances[].InstanceId" --output text);echo $id; }
 
@@ -95,4 +96,3 @@ iamdeletegroupmemberships () {
 		aws iam remove-user-from-group --group-name ${group} --user-name ${username}
 	done
 }
-
