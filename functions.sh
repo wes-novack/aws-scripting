@@ -42,13 +42,13 @@ iamdelete () {
 	#delete an iam user and related objects. Pass IAM username in as first positional parameter.
 	username=$1
 
-	echo "Checking for login profile and delete if found"
+	echo "Checking for login profile and deleting if found"
 	aws iam get-login-profile --user-name ${username} >/dev/null 2>&1
 	if [ "$?" -eq 0 ]; then 
 		aws iam delete-login-profile --user-name ${username}
 	fi
 
-	echo "Checking for virtual-mfa-device and delete if found"
+	echo "Checking for virtual-mfa-device and deleting if found"
 	mfaserial=$(aws iam list-mfa-devices --user-name ${username} --query MFADevices[].SerialNumber --output text)
 	if [ ! -z "$mfaserial" ]; then 
 		aws iam deactivate-mfa-device --user-name ${username} --serial-number "${mfaserial}"
