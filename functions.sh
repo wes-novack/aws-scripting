@@ -31,13 +31,13 @@ sp () {
 }
 
 unsetaws () {
-    aws_envs=$(env|grep -o 'AWS\|SAML'|sed 's/=.*//g')
-    for i in $aws_envs; do unset $i; done
+	aws_envs=$(env|grep -o 'AWS\|SAML'|sed 's/=.*//g')
+	for i in $aws_envs; do unset $i; done
 }
 
 iamdelete () {
-    #delete an iam user and related objects. Pass IAM username in as first positional parameter.
-    username=$1
+	#delete an iam user and related objects. Pass IAM username in as first positional parameter.
+	username=$1
 
 	echo "Checking for login profile and delete if found"
 	aws iam get-login-profile --user-name ${username} >/dev/null 2>&1
