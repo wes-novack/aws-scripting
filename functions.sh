@@ -1,6 +1,7 @@
 #!/bin/bash
 #Description: a collection of bash functions that leverage the AWS CLI
 #Formatting: tab spacing
+#Usage: Source this file or add to your .bashrc or equivalent to gain access to these functions.
 
 getidfromip () { id=$(aws ec2 describe-instances --filter Name=private-ip-address,Values="$1" --query "Reservations[].Instances[].InstanceId" --output text);echo $id; }
 
