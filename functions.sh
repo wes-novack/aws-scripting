@@ -55,8 +55,12 @@ iamdelete () {
 	echo "Checking and removing group memberships if found"
 	iamdeletegroupmemberships ${username}
 
-	#echo "Checking for inline user policies and removing if found"
-	#aws iam list-user-policies --user-name ${username}
+	echo "Checking for inline user policies and removing if found"
+	inlinepolicies=$(aws iam list-user-policies --user-name ${username} --query PolicyNames --output text)
+	for policy in $inlinepolicies; do
+		echo "${policy}"
+		aws iam delete-user-policy --user-name ${username} --policy-name ${policy}
+	done
 
 	echo "Checking for attached user policies and detaching if found"
 	policyarns=$(aws iam list-attached-user-policies --user-name ${username} --query AttachedPolicies[].PolicyArn --output text)
