@@ -35,7 +35,7 @@ sp () {
 
 unsetaws () {
 	#unsets all AWS and SAML environment variables
-	aws_envs=$(env|grep -o 'AWS\|SAML'|sed 's/=.*//g')
+	aws_envs=$(env|grep 'AWS\|SAML'|sed 's/=.*//g')
 	for i in $aws_envs; do unset $i; done
 }
 
