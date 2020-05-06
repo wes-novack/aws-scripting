@@ -46,7 +46,7 @@ iamdelete () {
 	echo "Checking for login profile and deleting if found"
 	aws iam get-login-profile --user-name ${username} >/dev/null 2>&1
 	if [ "$?" -eq 0 ]; then 
-		aws iam delete-login-profile --user-name ${username}
+		iam_delete_login_profile ${username}
 	fi
 
 	echo "Checking for virtual-mfa-device and deleting if found"
@@ -57,7 +57,7 @@ iamdelete () {
 	fi
 
 	echo "Checking and removing group memberships if found"
-	iamdeletegroupmemberships ${username}
+	iam_delete_group_memberships ${username}
 
 	echo "Checking for inline user policies and removing if found"
 	inlinepolicies=$(aws iam list-user-policies --user-name ${username} --query PolicyNames --output text)
@@ -88,7 +88,12 @@ iamdelete () {
 	fi
 }
 
-iamdeletegroupmemberships () {
+iam_delete_login_profile () {
+        username=$1
+        aws iam delete-login-profile --user-name ${username}
+}
+
+iam_delete_group_memberships () {
 	#delete group memberships for an IAM user. Pass IAM username in as first positional parameter.
 	username=$1
 	groups=$(aws iam list-groups-for-user --user-name ${username} --query Groups[].GroupName --output text)
