@@ -90,6 +90,7 @@ iamdelete () {
 
 iam_delete_login_profile () {
         username=$1
+	echo "Attempting to run 'iam delete-login-profile' for ${username}"
         aws iam delete-login-profile --user-name ${username}
 }
 
@@ -101,4 +102,11 @@ iam_delete_group_memberships () {
 	echo "Removing user ${username} from group ${group}"
 		aws iam remove-user-from-group --group-name ${group} --user-name ${username}
 	done
+}
+
+iam_create_login_profile () {
+	username=$1
+	password=$2
+	echo "Attempting to iam create-login-profile for user ${username}"
+	aws iam create-login-profile --user ${username} --password "${password}"
 }
