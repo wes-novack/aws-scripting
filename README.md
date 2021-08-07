@@ -14,7 +14,7 @@ The script `resize_ec2.sh` can be used to quickly resize an ec2 instance to a ne
 
 ### Do these work on Linux?
 
-Definitely. I orginally developed these on a notebook running Fedora, under bash. Since then, many others have contributed and run these scripts on various distributions, including Ubuntu and others.
+Definitely. I originally developed these on a notebook running Fedora, under bash. Since then, many others have contributed and run these scripts on various distributions, including Ubuntu and others.
 
 ### Do these work on Windows?
 
